@@ -60,8 +60,8 @@ CREATE TABLE player_match (
     FOREIGN KEY (match_game_id, match_start_timestamp) REFERENCES match(game_id, start_timestamp)
 );
 CREATE TABLE bet (
-    amount INTEGER,
-    win_amount INTEGER,
+    bet_amount INTEGER,
+    casino_earning INTEGER,
     timestamp TIMESTAMP,
     player_fiscal_code VARCHAR(255),
     match_game_id INTEGER,
