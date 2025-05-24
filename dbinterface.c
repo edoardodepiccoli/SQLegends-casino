@@ -56,24 +56,22 @@ int main()
                 PQclear(res);
                 break;
             case 2: // Durata media per ogni tipo di gioco
-                res = PQexec(conn, "SELECT gc.nome AS game_name, AVG(p.durata_minuti) AS avg_duration FROM partita p JOIN gioco gc ON p.gioco = gc.id GROUP BY gc.nome;");
+                res = PQexec(conn, "SELECT gc.nome AS game_name, ROUND(AVG(p.durata_minuti)::numeric, 1) AS avg_duration FROM partita p JOIN gioco gc ON p.gioco = gc.id GROUP BY gc.nome;");
                 checkExecError(res, conn);
                 numTuple = PQntuples(res);
                 numAttributi = PQnfields(res);
 
-                for(int i = 0; i < numAttributi; i++)
-                {
-                    fprintf(stdout, "%s\t\t", PQfname(res, i));
-                }
-                fprintf(stdout, "\n");
+                // Stampa i headers con larghezza fissa
+                fprintf(stdout, "%-20s %-15s\n", 
+                    PQfname(res, 0), 
+                    PQfname(res, 1));
+                fprintf(stdout, "----------------------------------------\n");
 
-                for(int i = 0; i < numTuple; i++)
-                {
-                    for (int j = 0; j < numAttributi; j++)
-                    {
-                        fprintf(stdout, "%s\t\t", PQgetvalue(res, i, j));
-                    }
-                    fprintf(stdout, "\n");
+                // Stampa i dati con larghezza fissa
+                for(int i = 0; i < numTuple; i++) {
+                    fprintf(stdout, "%-20s %-15s\n",
+                        PQgetvalue(res, i, 0),
+                        PQgetvalue(res, i, 1));
                 }
                 PQclear(res);
                 break;
